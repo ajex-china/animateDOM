@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html id="html"  onclick="clickHandler(event)">
+<head>
+    <meta charset="UTF-8">
+    <title>可以配合大部分缓动引擎</title>
+</head>
+<body id="body" >
+<div id="testDiv">
+
+</div>
+<script src="js/TweenLite.js"></script>
+<script src="js/AnimateDom.js"></script>
+<script>
+    var container = AnimateDom.getDom(window.document.getElementById("testDiv"));
+    var img = AnimateDom.newDom('img');
+    img.src = "images/100.jpg";
+    img.y = 200;
+    var txt = AnimateDom.newDom('p');
+    txt.width = 200;
+    txt.val = "点击任何地方，缓动";
+    container.addChild(txt);
+    container.addChild(img);
+    function clickHandler(data)
+    {
+        TweenLite.to(img,1,{x:data.pageX,y:data.pageY})
+    }
+</script>
+</body>
+</html>

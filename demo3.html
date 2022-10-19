@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>3D发散</title>
+</head>
+<body  style="overflow: hidden;background-color: #000000">
+<div id="testDiv">
+
+</div>
+<script src="js/AnimateDom.js"></script>
+<script>
+    var container = AnimateDom.getDom(window.document.getElementById("testDiv"));
+    // container.initStyle();
+    AnimateDom.set3DTransform(container.dom)
+    var destroyList = [];
+    var stageWidth = 1600;
+    var stageHeight = 800;
+    container.x = stageWidth/2;//透视是由父级决定的
+    container.y = stageHeight/2;
+    // container.perspective = 1000;//修改视距
+    function getChild()//简易对象池
+    {
+        var child;
+        if(destroyList.length > 0)
+        {
+            child = destroyList.shift();
+        }
+        else
+        {
+            child = AnimateDom.newDom("img");
+            child.src =  "images/100.jpg";
+        }
+        var random_x = 20 - Math.random()*40;
+        var random_y = 20 - Math.random()*40;
+        child.delayTransformSet = false;//做大数量动画效果须关掉延时函数
+        child.perspective = 1000;
+        child.x = random_x*100;
+        child.y = random_y*100;
+        child.z = -10000;
+        child.xSpeed = random_x;
+        child.ySpeed = random_y;
+        child.zSpeed = 50 + Math.random()*50;
+        child.alpha = 0;
+        return child;
+    }
+    function add()
+    {
+        var child = getChild();
+        container.addChild(child);
+    }
+    var _frameIndex = 0;
+    function run()
+    {
+        if(_frameIndex%4 == 0)
+        {
+            add()
+        }
+        _frameIndex++;
+        if(container.numChildren > 50)
+        {
+            var child = container.getChildAt(0);
+            destroy(child);
+        }
+        for(var i=0;i<container.numChildren;i++)
+        {
+            var child = container.getChildAt(i);
+            child.x += child.xSpeed;
+            child.y += child.ySpeed;
+            child.z += child.zSpeed;
+            child.alpha = child.alpha + 0.01;
+
+        }
+
+        requestAnimationFrame(run)
+    }
+    requestAnimationFrame(run)
+    function destroy(obj)
+    {
+        container.removeChild(obj);
+        destroyList.push(obj);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>3D旋转</title>
+</head>
+<body style="background-color: #000000">
+<div id="testDiv">
+
+</div>
+<script src="js/jquery-1.11.0.min.js"></script>
+<script src="js/AnimateDom.js"></script>
+<script>
+    var container = AnimateDom.getDom($('#testDiv'));
+    container.y = 100;
+    container.x = 500;
+    var count = 6
+    var r = 220;
+    var childList = [];
+    for(var i=0;i<count;i++){
+        var child = AnimateDom.newDom("img");
+        child.src =  "images/100.jpg";
+        child.du = 360/count*i;
+        child.rotationY = 360/count*i;
+        child.x = Math.sin(Math.PI/180*child.du)*r;
+        child.z = Math.cos(Math.PI/180*child.du)*r;
+        container.addChild(child);
+        childList.push(child);
+    }
+    function setZIndex()
+    {
+        for(var i=0;i<childList.length;i++)
+        {
+            for(var j = i+1;j<childList.length;j++)
+            {
+                if(childList[j].z > childList[i].z)
+                {
+                    var pp = childList[j];
+                    childList[j] = childList[i];
+                    childList[i] = pp;
+                }
+            }
+        }
+        for(var i=0;i<childList.length;i++)
+        {
+            childList[i].z_index = childList.length-i;
+        }
+    }
+    function run()
+    {
+        for(var i=0;i < childList.length;i++)
+        {
+            var child = childList[i];
+            if(child.du >= 360) child.du = child.du-360;
+            child.du = child.du+1;
+            child.rotationY =  child.du;
+            child.x = Math.sin(Math.PI/180*child.du)*r;
+            child.z = Math.cos(Math.PI/180*child.du)*r;
+        }
+        requestAnimationFrame(run)
+    }
+    requestAnimationFrame(run)
+
+    setInterval(setZIndex,500)
+</script>
+</body>
+</html>

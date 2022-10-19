@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>纸牌旋转</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .front{width: 384px;height: 512px;background-color: #000;border-radius:8px;color: #fff;}
+        .card{position: relative;overflow: hidden}
+    </style>
+</head>
+<body>
+<!--<script src="js/TweenMax.min.js"></script>-->
+<div id="card" class="card">
+    <div id="front" class="front">
+        <p>这里可以有字</p>
+        <input placeholder="甚至输入框都可以">
+    </div>
+    <img id="back" src="images/card.png" style="width: 384px;height: 512px;">
+</div>
+<script src="js/AnimateDom.js"></script>
+<script src="js/RotationCard.js"></script>
+<script>
+    var card = new AnimateDom.RotationCard("current",window.document.getElementById("card"));
+    card.initStyle();
+    card.x = 200;
+    card.y = 100;
+    AnimateDom.set3DTransform(card.dom);
+    var front = AnimateDom.getDom(window.document.getElementById("front"));
+    var back = AnimateDom.getDom(window.document.getElementById("back" ));
+    card.initCard(front,back);
+    card.rotationX = 10;
+    card.rotationY = 280;
+    function run()
+    {
+        card.rotationY +=1;
+        requestAnimationFrame(run)
+    }
+    requestAnimationFrame(run)
+</script>
+</body>
+</html>
